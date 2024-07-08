@@ -8,6 +8,10 @@ class Announcement(models.Model):
         in_process = "В процессе усыновления"
         inactive = "Неактивный"
 
+    class PetTypeChoices(models.TextChoices):
+        dog = "Собака"
+        cat = "Кошка"
+
     user = models.ForeignKey(User, related_name='announcements', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     price = models.PositiveIntegerField()
@@ -17,7 +21,7 @@ class Announcement(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     # критерии поиска
-    pet_type = models.CharField(max_length=50, blank=True, null=True)
+    pet_type = models.CharField(choices=PetTypeChoices.choices, max_length=50, blank=True, null=True)
     breed = models.CharField(max_length=50, blank=True, null=True)
     age = models.PositiveIntegerField(blank=False, null=False)
     status = models.CharField(max_length=50, choices=StatusChoices.choices)
@@ -29,5 +33,7 @@ class Announcement(models.Model):
     weigth = models.FloatField(null=False, blank=False)
     dimmensions = models.PositiveIntegerField(null=False, blank=False)
     temperament = models.CharField(max_length=100, null=True, blank=True)
-    
 
+    class Meta:
+        ordering = ['-published_at']
+    

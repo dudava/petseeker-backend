@@ -1,6 +1,12 @@
 from rest_framework import serializers
 from . import models
 
+
+class UserAuthSerializer(serializers.Serializer):
+    phone_number = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+
 class UserSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=False)
     username = serializers.CharField()
@@ -15,6 +21,10 @@ class UserSerializer(serializers.Serializer):
 
 class UserInfoSerializer(serializers.ModelSerializer):
     user_id = serializers.ReadOnlyField(source='user.id')
+    name = serializers.CharField(max_length=100, required=False, allow_null=True)
+    is_shelter = serializers.BooleanField(required=False, allow_null=True)
+    contacts = serializers.CharField(max_length=100, required=False, allow_null=True)
+    location = serializers.CharField(max_length=100, required=False, allow_null=True)
     description = serializers.CharField(required=False, allow_null=True)
 
     class Meta:

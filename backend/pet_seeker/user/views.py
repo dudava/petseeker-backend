@@ -7,27 +7,27 @@ import django.db
 
 from . import models
 from . import services
-from .serializers import UserSerializer, UserInfoSerializer
+from .serializers import UserSerializer, UserInfoSerializer, UserAuthSerializer
 
 
 
 
-class UserRegisterAPIView(mixins.CreateModelMixin, generics.GenericAPIView):
-    serializer_class = UserSerializer
+class UserRegisterView(mixins.CreateModelMixin, generics.GenericAPIView):
+    serializer_class = UserAuthSerializer
 
     def post(self, request, *args, **kwargs):
-        serializer = UserSerializer(data=request.data)
+        serializer = UserAuthSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
             user, user_info = services.create_user_with_userinfo(serializer.validated_data)
         except django.db.IntegrityError:
             return Response({
-                "error": "Пользователь с таким именем уже существует"
+                "error": "Пользователь с таким номером телефона уже существует"
             }, status=400)
         return Response(services.get_user_info(user), status=201)
 
 
-class UserDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
+class UserDetailView(mixins.RetrieveModelMixin, generics.GenericAPIView):
     serializer_class = UserSerializer
 
     def get(self, request, pk, format=None):
@@ -46,7 +46,16 @@ class UserMeView(mixins.RetrieveModelMixin, generics.GenericAPIView):
         return services.get_user_info(request.user)
 
 
-class UserInfoViewSet(viewsets.ModelViewSet):
+class UserInfoEditView(mixins.UpdateModelMixin, generics.GenericAPIView):
     serializer_class = UserInfoSerializer
     queryset = models.UserInfo.objects.all()
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+
+    def put(self, request):
+        user_info = models.UserInfo.objects.get(user=User.objects.first())
+        serializer = UserInfoSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.update(instance=user_info, validated_data=serializer.validated_data)
+        return Response(serializer.validated_data, 200)
+    
+        # TODO: заблокировать изменение описания, номера приюта для пользователя с is_shelter = False

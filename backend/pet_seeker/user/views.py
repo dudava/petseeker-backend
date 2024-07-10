@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractBaseUser
 from rest_framework import serializers, status, mixins, viewsets, permissions, generics, views
 from rest_framework.response import Response
 from rest_framework.views import APIView

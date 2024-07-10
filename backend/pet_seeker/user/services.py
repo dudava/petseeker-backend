@@ -14,12 +14,11 @@ def get_user_info(user : User):
     user_info = user.user_info
     data = {
         "id": user.id,
-        "is_shelter": user_info.is_shelter,
+        "is_shelter_owner": user_info.is_shelter_owner,
         "username": user.username,
         "email": user.email,
         "name": user_info.name,
         "contacts": user_info.contacts,
         "location": user_info.location,
-        "description": user_info.description,
     }
     return data

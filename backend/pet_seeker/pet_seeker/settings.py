@@ -41,9 +41,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_spectacular',
 
-    'user',
-    'announcement',
-    'search_announcement',
+    'user', # приложение для работы с пользоавтелями (регистрация, изменение информации)
+    'announcement', # приложение для работы с объявлениями
+    'search_announcement', # приложение для поиска объявлений по параметрам и пагинация
+    'shelter', # приложение для добавления приютов к пользователю и их редактирование
     
 ]
 

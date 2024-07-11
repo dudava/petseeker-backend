@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractBaseUser
 from rest_framework import serializers, status, mixins, viewsets, permissions, generics, views
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -31,6 +31,7 @@ class UserDetailView(mixins.RetrieveModelMixin, generics.GenericAPIView):
     serializer_class = UserSerializer
 
     def get(self, request, pk, format=None):
+        print(request.user)
         try:
             user = User.objects.get(pk=pk)
         except User.DoesNotExist:
@@ -52,7 +53,7 @@ class UserInfoEditView(mixins.UpdateModelMixin, generics.GenericAPIView):
     # permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
     def put(self, request):
-        user_info = models.UserInfo.objects.get(user=User.objects.first())
+        user_info = models.UserInfo.objects.get(user=request.user)
         serializer = UserInfoSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.update(instance=user_info, validated_data=serializer.validated_data)

@@ -33,7 +33,7 @@ class Announcement(models.Model):
     weigth = models.FloatField(null=False, blank=False)
     dimmensions = models.PositiveIntegerField(null=False, blank=False)
     temperament = models.CharField(max_length=100, null=True, blank=True)
-
+    
     class Meta:
         ordering = ['-published_at']
     

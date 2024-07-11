@@ -4,15 +4,16 @@ from rest_framework.response import Response
 
 from . import models, serializers
 
-class AnnouncementCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class AnnouncementCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = models.Announcement.objects.all()
     serializer_class = serializers.AnnouncementSerializer
 
     def perform_create(self, serializer):
-        serializer.save(user=User.objects.first())
+        serializer.save(user=self.request.user)
 
 
 class AnnouncementDeleteView(mixins.DestroyModelMixin, generics.GenericAPIView):
+    # TODO: защита от удаления не своих объявлений
     def delete(self, request, pk, format=None):
         try:
             announcement = models.Announcement.objects.get(pk=pk)

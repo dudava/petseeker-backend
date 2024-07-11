@@ -10,7 +10,7 @@ class ShelterCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin,
     serializer_class = serializers.ShelterSerializer
 
     def perform_create(self, serializer):
-        user = User.objects.first()
+        user = self.request.user
         if not user.user_info.is_shelter_owner:
             raise exceptions.NotAcceptable("Вы не являетесь владельцем приюта(ов)")
         serializer.save(user=user)

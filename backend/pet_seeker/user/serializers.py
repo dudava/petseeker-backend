@@ -3,7 +3,7 @@ from . import models
 
 
 class UserAuthSerializer(serializers.Serializer):
-    phone_number = serializers.CharField()
+    username = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
 

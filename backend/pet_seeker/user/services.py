@@ -4,7 +4,7 @@ from .serializers import UserSerializer
 
 def create_user_with_userinfo(validated_data):
     user = User.objects.create_user(
-            username=validated_data.get('phone_number'), 
+            username=validated_data.get('username'), 
             password=validated_data.get('password'),
         )
     user_info = models.UserInfo.objects.create(user=user)

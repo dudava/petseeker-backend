@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from shelter.models import Shelter
 
-class Announcement(models.Model):
+
+class AnnouncementMixin(models.Model):
     class StatusChoices(models.TextChoices):
         active = "Активный"
         in_process = "В процессе усыновления"
@@ -12,7 +14,6 @@ class Announcement(models.Model):
         dog = "Собака"
         cat = "Кошка"
 
-    user = models.ForeignKey(User, related_name='announcements', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     price = models.PositiveIntegerField()
     description = models.TextField(blank=True)
@@ -33,7 +34,14 @@ class Announcement(models.Model):
     weigth = models.FloatField(null=False, blank=False)
     dimmensions = models.PositiveIntegerField(null=False, blank=False)
     temperament = models.CharField(max_length=100, null=True, blank=True)
-    
+
     class Meta:
+        abstract = True
         ordering = ['-published_at']
-    
+
+
+class PrivateAnnouncement(AnnouncementMixin):
+    user = models.ForeignKey(User, related_name='announcements', on_delete=models.CASCADE)
+
+class ShelterAnnouncement(AnnouncementMixin):
+    shelter = models.ForeignKey(Shelter, related_name='announcements', on_delete=models.CASCADE)

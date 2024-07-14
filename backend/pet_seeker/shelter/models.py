@@ -8,6 +8,3 @@ class Shelter(LocationModelMixin):
     user = models.ForeignKey(User, related_name='shelters', on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=False, null=False)
     description = models.TextField()
-
-
-    

@@ -5,8 +5,8 @@ from . import views
 
 
 urlpatterns = [
-    path('create/', views.AnnouncementCreateEditViewSet.as_view({'post': 'create'})),
-    path('edit/<int:pk>/', views.AnnouncementCreateEditViewSet.as_view({'put': 'update'})),
-    path('detail/<int:pk>/', views.AnnouncementDetailView.as_view()),
-    path('delete/<int:pk>/', views.AnnouncementDeleteView.as_view()),
+    path('create/', views.PrivateAnnouncementCreateEditViewSet.as_view({'post': 'create'})),
+    path('edit/<int:pk>/', views.PrivateAnnouncementCreateEditViewSet.as_view({'put': 'update'})),
+    path('detail/<int:pk>/', views.PrivateAnnouncementDetailView.as_view()),
+    path('delete/<int:pk>/', views.PrivateAnnouncementDeleteView.as_view()),
 ]

@@ -1,5 +1,5 @@
-from announcement.models import Announcement
+from announcement.models import PrivateAnnouncement
 
 
 def get_last_10_announcements():
-    return Announcement.objects.all()[:10]
+    return PrivateAnnouncement.objects.all()[:10]

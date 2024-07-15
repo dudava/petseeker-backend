@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,6 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+YANDEXGEOCODER_API_KEY = os.getenv('YANDEXGEOCODER_API_KEY')
 
 # Application definition
 
@@ -46,7 +50,7 @@ INSTALLED_APPS = [
     'search_announcement', # приложение для поиска объявлений по параметрам и пагинация
     'shelter', # приложение для добавления приютов к пользователю и их редактирование
     'shelter_announcement',
-    
+    'gis_app', # приложение для работы с картами   
 ]
 
 MIDDLEWARE = [

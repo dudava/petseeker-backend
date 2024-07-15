@@ -20,4 +20,4 @@ class ShelterTest(TestCase):
         coordinates = YandexGeocoderCoordinatesToAddressServicer.long_latt_field_to_coordinates(shelter.lattitude_longitude)
         self.assertEqual(coordinates, (55.101344, 73.350488))
         address = YandexGeocoderCoordinatesToAddressServicer.get_address_from_coordinates(coordinates)
-        self.assertEqual(address, 'Россия, посёлок Омский, Центральная улица, 12Б')
+        self.assertEqual(address, 'Россия, посёлок Омский, Центральная улица, 12Б') 

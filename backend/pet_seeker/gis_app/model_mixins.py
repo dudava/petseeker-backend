@@ -1,8 +1,11 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
+from .services import YandexGeocoderCoordinatesToAddressServicer
+
 
 class LocationModelMixin(models.Model):
+    address = models.CharField(max_length=100)
     lattitude_longitude = models.CharField(max_length=100)
     class Meta:
         abstract = True

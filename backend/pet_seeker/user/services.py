@@ -8,6 +8,8 @@ def create_user_with_userinfo(validated_data):
             password=validated_data.get('password'),
         )
     user_info = models.UserInfo.objects.create(user=user)
+    print(user_info)
+    print(user)
     return user, user_info
 
 def get_user_info(user : User):

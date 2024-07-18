@@ -11,6 +11,11 @@ class LocationModelMixin(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
+        geocoder = YandexGeocoderCoordinatesToAddressServicer
+        self.lattitude_longitude = ", ".join(geocoder.get_coordinates_from_address(self.address).split())
+        # print(", ".join([geocoder.get_coordinates_from_address(self.address).split()]))
+        # self.lattitude_longitude = ", ".join([geocoder.get_coordinates_from_address(self.address).split()])
+        # coordinates = YandexGeocoderCoordinatesToAddressServicer.long_latt_field_to_coordinates(self.lattitude_longitude)
         if not self.lattitude_longitude.strip():
             raise ValidationError("Поле долгота и широта не может быть пустым")
 
@@ -26,4 +31,6 @@ class LocationModelMixin(models.Model):
 
         if not -180 <= longitude <= 180:
             raise ValidationError("Долгота должна быть в диапазоне от -180 до 180 градусов")
+        
+        
         super().save(*args, **kwargs)

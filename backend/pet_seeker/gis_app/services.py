@@ -12,6 +12,11 @@ class YandexGeocoderCoordinatesToAddressServicer:
         longitude = float(longitude)
         return (latitude, longitude)
     
+    @staticmethod
+    def coordinates_to_long_latt_field(coordinates: tuple) -> str:
+        latitude, longitude = coordinates
+        return f"{latitude},{longitude}"
+    
     @classmethod
     def get_address_from_coordinates(self, coordinates: tuple):
         correct_format_cooridinates = ", ".join(tuple([str(coordinates[1]), str(coordinates[0])]))
@@ -25,5 +30,19 @@ class YandexGeocoderCoordinatesToAddressServicer:
         response.raise_for_status()
         result = (
             response.json()['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['formatted']
+        )
+        return result
+    
+    @classmethod
+    def get_coordinates_from_address(self, address: str):
+        response = requests.get(self.geocoder_url, params={
+            'apikey': self.api_key,
+            'geocode': address,
+            'results': 1,
+            'format': 'json',
+        })
+        response.raise_for_status()
+        result = (
+            response.json()['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos']
         )
         return result

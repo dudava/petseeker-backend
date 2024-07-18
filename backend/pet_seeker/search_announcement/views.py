@@ -14,11 +14,10 @@ class AnnouncementPaginator(PageNumberPagination):
 
 class AnnouncementFilter(django_filters.FilterSet):
     pet_type = django_filters.CharFilter(lookup_expr='exact')
-    price = django_filters.RangeFilter()
 
     class Meta:
         model = PrivateAnnouncement
-        fields = ('pet_type', 'price')
+        fields = ('pet_type',)
 
 
 

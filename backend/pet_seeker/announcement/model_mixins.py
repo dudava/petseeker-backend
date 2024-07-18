@@ -12,7 +12,6 @@ class AnnouncementMixin(models.Model):
         cat = "Кошка"
 
     name = models.CharField(max_length=100)
-    price = models.PositiveIntegerField()
     description = models.TextField(blank=True)
     location = models.CharField(max_length=50, blank=True)
     published_at = models.DateTimeField(auto_now_add=True)

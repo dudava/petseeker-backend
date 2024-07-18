@@ -3,4 +3,5 @@ from . import views
 
 urlpatterns = [
     path('', views.UserFeedbackCreateEditViewSet.as_view({'post': 'create'})),
+    path('delete/<int:pk>/', views.UserFeedbackDeleteView.as_view()),
 ]

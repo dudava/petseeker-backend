@@ -9,3 +9,4 @@ class UserFeedback(FeedbackMixin):
     user_by = models.ForeignKey(User, related_name='my_feedbacks', on_delete=models.CASCADE)
     user_to = models.ForeignKey(User, related_name='feedbacks', on_delete=models.CASCADE)
     announcement = models.ForeignKey(PrivateAnnouncement, on_delete=models.CASCADE)
+

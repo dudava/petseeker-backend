@@ -5,6 +5,7 @@ from . import models
 
 class PrivateAnnouncementSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.id')
+    lattitude_longitude = serializers.ReadOnlyField()
     class Meta:
         model = models.PrivateAnnouncement
         fields = '__all__'

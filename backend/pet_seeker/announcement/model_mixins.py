@@ -1,7 +1,9 @@
 
 from django.db import models
+from gis_app.model_mixins import LocationModelMixin
 
-class AnnouncementMixin(models.Model):
+
+class AnnouncementMixin(LocationModelMixin):
     class StatusChoices(models.TextChoices):
         active = "Активный"
         in_process = "В процессе усыновления"
@@ -13,7 +15,6 @@ class AnnouncementMixin(models.Model):
 
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    location = models.CharField(max_length=50, blank=True)
     published_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

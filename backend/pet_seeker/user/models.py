@@ -7,3 +7,6 @@ class UserInfo(models.Model):
     contacts = models.CharField(max_length=100, null=True, blank=True)
     name = models.CharField(max_length=100, null=True, blank=True) # для частника ФИО
     location = models.CharField(max_length=200, null=True, blank=True) # для частника район
+    rating = models.FloatField(null=True, blank=True)
+
+    

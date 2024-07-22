@@ -59,4 +59,3 @@ class UserInfoEditView(mixins.UpdateModelMixin, generics.GenericAPIView):
         serializer.update(instance=user_info, validated_data=serializer.validated_data)
         return Response(serializer.validated_data, 200)
     
-        # TODO: заблокировать изменение описания, номера приюта для пользователя с is_shelter = False

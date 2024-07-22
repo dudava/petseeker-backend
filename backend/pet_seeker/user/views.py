@@ -40,9 +40,9 @@ class UserDetailView(mixins.RetrieveModelMixin, generics.GenericAPIView):
         return Response(response, 200)
     
 class UserMeView(mixins.RetrieveModelMixin, generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserSerializer
-
+    permission_classes = [permissions.IsAuthenticated]
+    
     def get(self, request, *args, **kwargs):
         return services.get_user_info(request.user)
 
@@ -50,7 +50,7 @@ class UserMeView(mixins.RetrieveModelMixin, generics.GenericAPIView):
 class UserInfoEditView(mixins.UpdateModelMixin, generics.GenericAPIView):
     serializer_class = UserInfoSerializer
     queryset = models.UserInfo.objects.all()
-    # permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
     def put(self, request):
         user_info = models.UserInfo.objects.get(user=request.user)

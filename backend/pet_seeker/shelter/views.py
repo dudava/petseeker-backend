@@ -1,13 +1,14 @@
 from django.contrib.auth.models import User
-from rest_framework import views, generics, viewsets, mixins, exceptions
+from rest_framework import views, generics, viewsets, mixins, exceptions, permissions
 from rest_framework.response import Response
 from .models import Shelter
 from . import serializers
-
+from user.permissions import IsOwnerOrReadOnly
 
 class ShelterCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Shelter.objects.all()
     serializer_class = serializers.ShelterSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -36,6 +37,8 @@ class UserSheltersView(mixins.RetrieveModelMixin, generics.GenericAPIView):
 
 
 class ShelterDeleteView(mixins.DestroyModelMixin, generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+
     def delete(self, request, pk, format=None):
         try:
             shelter = Shelter.objects.get(pk=pk)

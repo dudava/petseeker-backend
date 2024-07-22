@@ -1,14 +1,16 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from rest_framework import viewsets, mixins, generics, views, exceptions
+from rest_framework import viewsets, mixins, generics, views, exceptions, permissions
 from rest_framework.response import Response
 from .models import UserFeedback
-from . import serializers 
+from . import serializers
+from user.permissions import IsOwnerOrReadOnly
 
 
 class UserFeedbackCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = UserFeedback.objects.all()
     serializer_class = serializers.UserFeedbackSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
         text = serializer.validated_data.get('text')
@@ -27,6 +29,7 @@ class UserFeedbackCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelM
 
 
 class UserFeedbackDeleteView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
     def delete(self, request, pk, format=None):
         try:
             feedback = UserFeedback.objects.get(pk=pk)

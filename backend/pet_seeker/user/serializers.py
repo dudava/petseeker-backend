@@ -11,7 +11,6 @@ class UserSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=False)
     phone_number = serializers.CharField()
     password = serializers.CharField(write_only=True)
-    email = serializers.EmailField()
     is_shelter_owner = serializers.BooleanField() # в зависимости от значения, некоторые поля должны быть null
     contacts = serializers.CharField(max_length=100)
     name = serializers.CharField(max_length=100) # для частника ФИО, для приюта название

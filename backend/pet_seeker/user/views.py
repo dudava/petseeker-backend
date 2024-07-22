@@ -20,7 +20,8 @@ class UserRegisterView(mixins.CreateModelMixin, generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         try:
             user, user_info = services.create_user_with_userinfo(serializer.validated_data)
-        except django.db.IntegrityError:
+        except django.db.IntegrityError as ex:
+            print(ex.args)
             return Response({
                 "error": "Пользователь с таким номером телефона уже существует"
             }, status=400)
@@ -33,8 +34,8 @@ class UserDetailView(mixins.RetrieveModelMixin, generics.GenericAPIView):
     def get(self, request, pk, format=None):
         print(request.user)
         try:
-            user = User.objects.get(pk=pk)
-        except User.DoesNotExist:
+            user = models.CustomUser.objects.get(pk=pk)
+        except models.CustomUser.DoesNotExist:
             return Response({"error": "Пользователя не существует"}, 400)
         response = services.get_user_info(user)
         return Response(response, 200)

@@ -1,5 +1,4 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.conf import settings
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Permission, Group, User
 from django.db import models
 
 
@@ -30,12 +29,24 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'phone_number'
     REQUIRED_FIELDS = []
 
+    user_permissions = models.ManyToManyField(
+        Permission,
+        blank=True,
+        related_name='permissions'  # Добавляем related_name
+    )
+
+    groups = models.ManyToManyField(
+        Group, 
+        blank=True,
+        related_name='groups',
+    )
+
     def __str__(self):
         return self.phone_number
     
 
 class UserInfo(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='user_info', null=True, blank=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, related_name='user_info', null=True, blank=True, on_delete=models.CASCADE)
     is_shelter_owner = models.BooleanField(default=False) # в зависимости от значения, некоторые поля должны быть null
     contacts = models.CharField(max_length=100, null=True, blank=True)
     name = models.CharField(max_length=100, null=True, blank=True) # для частника ФИО

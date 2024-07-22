@@ -3,13 +3,13 @@ from . import models
 
 
 class UserAuthSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    phone_number = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
 
 class UserSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=False)
-    username = serializers.CharField()
+    phone_number = serializers.CharField()
     password = serializers.CharField(write_only=True)
     email = serializers.EmailField()
     is_shelter_owner = serializers.BooleanField() # в зависимости от значения, некоторые поля должны быть null

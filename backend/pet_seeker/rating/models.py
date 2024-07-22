@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 from django.core.exceptions import ValidationError
 from announcement.models import PrivateAnnouncement
@@ -7,8 +7,8 @@ from .model_mixins import FeedbackModelMixin
 from . import services
 
 class UserFeedback(FeedbackModelMixin):
-    user_by = models.ForeignKey(User, related_name='my_feedbacks', on_delete=models.CASCADE)
-    user_to = models.ForeignKey(User, related_name='feedbacks', on_delete=models.CASCADE)
+    user_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='my_feedbacks', on_delete=models.CASCADE)
+    user_to = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='feedbacks', on_delete=models.CASCADE)
     announcement = models.ForeignKey(PrivateAnnouncement, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):

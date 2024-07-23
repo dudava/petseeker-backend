@@ -1,10 +1,10 @@
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from rest_framework import viewsets, mixins, generics, views, exceptions, permissions
 from rest_framework.response import Response
 from .models import UserFeedback
 from . import serializers
 from user.permissions import IsOwnerOrReadOnly
+from user.models import CustomUser
 
 
 class UserFeedbackCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
@@ -44,8 +44,8 @@ class UserFeedbackListView(mixins.ListModelMixin, generics.GenericAPIView):
 
     def get(self, request, pk, format=None):
         try:
-            user = User.objects.get(pk=pk)
-        except User.DoesNotExist:
+            user = CustomUser.objects.get(pk=pk)
+        except CustomUser.DoesNotExist:
             return Response({"error": "Пользователя не существует"}, 400)
         feedbacks = user.feedbacks.all()
         serializer = self.serializer_class(feedbacks, many=True)

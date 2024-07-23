@@ -1,9 +1,9 @@
-from django.contrib.auth.models import User
 from rest_framework import views, generics, viewsets, mixins, exceptions, permissions
 from rest_framework.response import Response
 from .models import Shelter
 from . import serializers
 from user.permissions import IsOwnerOrReadOnly
+from user.models import CustomUser
 
 class ShelterCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Shelter.objects.all()
@@ -29,8 +29,8 @@ class UserSheltersView(mixins.RetrieveModelMixin, generics.GenericAPIView):
 
     def get(self, request, pk, format=None):
         try:
-            user = User.objects.get(pk=pk)
-        except User.DoesNotExist:
+            user = CustomUser.objects.get(pk=pk)
+        except CustomUser.DoesNotExist:
             return Response({"error": "Пользователя не существует"}, 400)
         shelters = user.shelters.all()
         serializer = serializers.ShelterSerializer(shelters, many=True)

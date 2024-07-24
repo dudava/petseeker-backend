@@ -11,6 +11,18 @@ class PrivateAnnouncementSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PrivateAnnouncementListSerializer(serializers.ModelSerializer):
+    name = serializers.ReadOnlyField()
+    address = serializers.ReadOnlyField()
+    published_at = serializers.ReadOnlyField()
+    user = serializers.ReadOnlyField(source='user.user_info.name')
+    status = serializers.ReadOnlyField()
+
+    class Meta:
+        model = models.PrivateAnnouncement
+        fields = ('name', 'address', 'published_at', 'user', 'status')
+
+
 class UserAnnouncementSerializer(serializers.Serializer):
     is_shelter_owner = serializers.CharField(source='user_info.is_shelter_owner')
     name = serializers.CharField(source='user_info.name')

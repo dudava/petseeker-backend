@@ -2,7 +2,7 @@ from rest_framework import viewsets, mixins
 import django_filters
 from django_filters.rest_framework import DjangoFilterBackend
 from announcement.models import PrivateAnnouncement
-from announcement.serializers import PrivateAnnouncementSerializer
+from announcement.serializers import PrivateAnnouncementListSerializer
 from rest_framework.pagination import PageNumberPagination
 
 
@@ -25,7 +25,7 @@ class AnnouncementFilter(django_filters.FilterSet):
 
 class AnnouncementSearchViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = PrivateAnnouncement.objects.all()
-    serializer_class = PrivateAnnouncementSerializer
+    serializer_class = PrivateAnnouncementListSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = AnnouncementFilter
     pagination_class = AnnouncementPaginator

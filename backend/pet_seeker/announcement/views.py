@@ -27,7 +27,7 @@ class PrivateAnnouncementDeleteView(mixins.DestroyModelMixin, generics.GenericAP
 
 
 class PrivateAnnouncementDetailView(mixins.RetrieveModelMixin, generics.GenericAPIView):
-    serializer_class = serializers.PrivateAnnouncementDetailSerializer
+    serializer_class = serializers.PrivateAnnouncementSerializer
 
     def get(self, request, pk, format=None):
         try:
@@ -40,7 +40,7 @@ class PrivateAnnouncementDetailView(mixins.RetrieveModelMixin, generics.GenericA
         announcement_serializer = serializers.PrivateAnnouncementSerializer(announcement)
         user_serializer = serializers.UserAnnouncementSerializer(user)        
 
-        detail_serializer = serializers.PrivateAnnouncementDetailSerializer(data={
+        detail_serializer = serializers.PrivateAnnouncementSerializer(data={
             'announcement_detail': announcement_serializer.data,
             'user': user_serializer.data,
         })

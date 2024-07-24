@@ -7,7 +7,7 @@ from user.permissions import IsOwnerOrReadOnly, IsShelterOwnerOrReadOnly
 
 
 class ShelterAnnouncementCreateEditViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.ShelterAnnouncementSerializer
+    serializer_class = serializers.ShelterAnnouncementDetailSerializer
     queryset = ShelterAnnouncement.objects.all()
     permission_classes = [IsOwnerOrReadOnly, IsShelterOwnerOrReadOnly]
 
@@ -24,19 +24,19 @@ class ShelterAnnouncementDeleteView(mixins.DestroyModelMixin, generics.GenericAP
     
 
 class ShelterAnnouncementDetailView(mixins.RetrieveModelMixin, generics.GenericAPIView):
-    serializer_class = serializers.ShelterAnnouncementSerializer
+    serializer_class = serializers.ShelterAnnouncementDetailSerializer
 
     def get(self, request, pk, format=None):
         try:
             announcement = ShelterAnnouncement.objects.get(pk=pk)
         except ShelterAnnouncement.DoesNotExist:
             return Response({"error": "Объявление не существует"}, 400)
-        serializer = serializers.ShelterAnnouncementSerializer(announcement)
+        serializer = serializers.ShelterAnnouncementDetailSerializer(announcement)
         return Response(serializer.data, 200)
     
 
 class ShelterListAnnouncementsView(mixins.ListModelMixin, generics.GenericAPIView):
-    serializer_class = serializers.ShelterAnnouncementSerializer
+    serializer_class = serializers.ShelterAnnouncementDetailSerializer
 
     def get(self, request, pk, format=None):
         try:
@@ -44,6 +44,6 @@ class ShelterListAnnouncementsView(mixins.ListModelMixin, generics.GenericAPIVie
         except Shelter.DoesNotExist:
             return Response({"error": "Приют не существует"}, 400)
         announcements = shelter.announcements.all()
-        serializer = serializers.ShelterAnnouncementSerializer(announcements, many=True)
+        serializer = serializers.ShelterAnnouncementDetailSerializer(announcements, many=True)
         response = serializer.data
         return Response(response, 200)

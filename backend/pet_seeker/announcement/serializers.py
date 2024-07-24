@@ -17,10 +17,11 @@ class PrivateAnnouncementListSerializer(serializers.ModelSerializer):
     published_at = serializers.ReadOnlyField()
     user = serializers.ReadOnlyField(source='user.user_info.name')
     status = serializers.ReadOnlyField()
+    state = serializers.ReadOnlyField()
 
     class Meta:
         model = models.PrivateAnnouncement
-        fields = ('name', 'address', 'published_at', 'user', 'status')
+        fields = ('name', 'address', 'published_at', 'user', 'status', 'state')
 
 
 class UserAnnouncementSerializer(serializers.Serializer):

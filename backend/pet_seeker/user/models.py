@@ -7,7 +7,7 @@ class CustomUserManager(BaseUserManager):
         if not phone_number:
             raise ValueError('Должен быть указан номер телефона')
         user = self.model(phone_number=phone_number, **extra_fields)
-        user.set_password(password)
+        user.set_unusable_password()
         user.save()
         return user
     
@@ -19,8 +19,6 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=15, unique=True)
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)

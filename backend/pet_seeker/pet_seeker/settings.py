@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-90t-xxoi$7tq$j=p++mb$r4pn^j2jy6f1bgonio7ti^x!a%ze_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'pet-seeker.loca.lt',]   
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'd917-77-221-200-10.ngrok-free.app']   
 
 YANDEXGEOCODER_API_KEY = os.getenv('YANDEXGEOCODER_API_KEY')
 
@@ -37,12 +37,12 @@ YANDEXGEOCODER_API_KEY = os.getenv('YANDEXGEOCODER_API_KEY')
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'rest_framework.authtoken',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework_simplejwt',
     'drf_spectacular',
 
     'user', # приложение для работы с пользоавтелями (регистрация, изменение информации)
@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'shelter', # приложение для добавления приютов к пользователю и их редактирование
     'shelter_announcement',
     'gis_app', # приложение для работы с картами   
-    'rating' # приложение для пользовательского рейтинга
+    'rating', # приложение для пользовательского рейтинга
+    'sms_verification', # приложение для регистраци и авторизации через смс
 ]
 
 MIDDLEWARE = [
@@ -153,7 +154,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',

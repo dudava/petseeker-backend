@@ -2,11 +2,6 @@ from rest_framework import serializers
 from . import models
 
 
-class UserAuthSerializer(serializers.Serializer):
-    phone_number = serializers.CharField()
-    password = serializers.CharField(write_only=True)
-
-
 class UserSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=False)
     phone_number = serializers.CharField()

@@ -1,31 +1,11 @@
-from django.contrib.auth.models import User, AbstractBaseUser
 from rest_framework import serializers, status, mixins, viewsets, permissions, generics, views
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .permissions import IsOwnerOrReadOnly
-import django.db
 
 from . import models
 from . import services
-from .serializers import UserSerializer, UserInfoSerializer, UserAuthSerializer
-
-
-
-
-class UserRegisterView(mixins.CreateModelMixin, generics.GenericAPIView):
-    serializer_class = UserAuthSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = UserAuthSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        try:
-            user, user_info = services.create_user_with_userinfo(serializer.validated_data)
-        except django.db.IntegrityError as ex:
-            print(ex.args)
-            return Response({
-                "error": "Пользователь с таким номером телефона уже существует"
-            }, status=400)
-        return Response(services.get_user_info(user), status=201)
+from .serializers import UserSerializer, UserInfoSerializer
 
 
 class UserDetailView(mixins.RetrieveModelMixin, generics.GenericAPIView):

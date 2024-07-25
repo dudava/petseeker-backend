@@ -34,4 +34,6 @@ class SmsAuthView(generics.CreateAPIView):
         else:
             user = CustomUser.objects.get(phone_number=phone_number)
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key}, 200)
+        response = Response({'message': 'Cookie set successfully'}, 200)
+        response.set_cookie('token', token.key, httponly=True)
+        return response

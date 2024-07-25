@@ -4,7 +4,7 @@ from rest_framework import viewsets, mixins, generics, views
 from .models import ShelterAnnouncement
 from shelter.models import Shelter
 from user.permissions import IsOwnerOrReadOnly, IsShelterOwnerOrReadOnly
-
+from search_announcement.views import PageNumberPagination
 
 class ShelterAnnouncementCreateEditViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ShelterAnnouncementDetailSerializer
@@ -36,14 +36,15 @@ class ShelterAnnouncementDetailView(mixins.RetrieveModelMixin, generics.GenericA
     
 
 class ShelterListAnnouncementsView(mixins.ListModelMixin, generics.GenericAPIView):
-    serializer_class = serializers.ShelterAnnouncementDetailSerializer
-
+    serializer_class = serializers.ShelterAnnouncementSerializer
+    pagination_class = PageNumberPagination
+    
     def get(self, request, pk, format=None):
         try:
             shelter = Shelter.objects.get(pk=pk)
         except Shelter.DoesNotExist:
             return Response({"error": "Приют не существует"}, 400)
         announcements = shelter.announcements.all()
-        serializer = serializers.ShelterAnnouncementDetailSerializer(announcements, many=True)
+        serializer = serializers.ShelterAnnouncementSerializer(announcements, many=True)
         response = serializer.data
         return Response(response, 200)

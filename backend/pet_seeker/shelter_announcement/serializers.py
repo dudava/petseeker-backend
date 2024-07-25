@@ -11,6 +11,7 @@ class ShelterAnnouncementDetailSerializer(serializers.ModelSerializer):
 
 
 class ShelterAnnouncementSerializer(serializers.ModelSerializer):
+    shelter = serializers.ReadOnlyField(source='shelter.name')
     class Meta:
         model = ShelterAnnouncement
-        fields = ('name', 'address', 'published_at')
+        fields = ('id', 'name', 'address', 'published_at', 'shelter')

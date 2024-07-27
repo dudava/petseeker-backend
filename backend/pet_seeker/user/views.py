@@ -12,7 +12,6 @@ class UserDetailView(mixins.RetrieveModelMixin, generics.GenericAPIView):
     serializer_class = UserSerializer
 
     def get(self, request, pk, format=None):
-        print(request.user)
         try:
             user = models.CustomUser.objects.get(pk=pk)
         except models.CustomUser.DoesNotExist:
@@ -25,7 +24,7 @@ class UserMeView(mixins.RetrieveModelMixin, generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def get(self, request, *args, **kwargs):
-        return services.get_user_info(request.user)
+        return Response(services.get_user_info(request.user), 200)
 
 
 class UserInfoEditView(mixins.UpdateModelMixin, generics.GenericAPIView):

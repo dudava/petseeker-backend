@@ -17,5 +17,6 @@ def get_user_info(user : models.CustomUser):
         "name": user_info.name,
         "contacts": user_info.contacts,
         'rating': user_info.rating,
+        'profile_image': user_info.profile_image.image.url if user_info.profile_image else None,
     }
     return data

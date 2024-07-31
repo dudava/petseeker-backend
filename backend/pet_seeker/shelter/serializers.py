@@ -11,5 +11,5 @@ class ShelterSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_images(self, obj):
-        return [image.image.url for image in obj.images.all()]
+        return [{'id': image.id, 'url': image.image.url} for image in obj.images.all()]
         

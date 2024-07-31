@@ -7,7 +7,7 @@ from user.permissions import IsOwnerOrReadOnly
 
 class PrivateAnnouncementCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = models.PrivateAnnouncement.objects.all()
-    serializer_class = serializers.PrivateAnnouncementSerializer
+    serializer_class = serializers.PrivateAnnouncementDetailSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
@@ -26,9 +26,12 @@ class PrivateAnnouncementDeleteView(mixins.DestroyModelMixin, generics.GenericAP
         return Response({"success": "Объявление удалено"}, 200)
 
 
-class PrivateAnnouncementDetailView(mixins.RetrieveModelMixin, generics.GenericAPIView):
-    serializer_class = serializers.PrivateAnnouncementSerializer
+class PrivateAnnouncementDetailView(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    queryset = models.PrivateAnnouncement.objects.all()
+    serializer_class = serializers.PrivateAnnouncementDetailSerializer
 
+
+class PrivateAnnouncementPresentationView(mixins.RetrieveModelMixin, generics.GenericAPIView):
     def get(self, request, pk, format=None):
         try:
             announcement = models.PrivateAnnouncement.objects.get(pk=pk)
@@ -37,14 +40,12 @@ class PrivateAnnouncementDetailView(mixins.RetrieveModelMixin, generics.GenericA
         user = announcement.user
         if not user:
             return Response({"error": "Пользователя не существует"}, 400)
-        announcement_serializer = serializers.PrivateAnnouncementSerializer(announcement)
+        announcement_serializer = serializers.PrivateAnnouncementDetailSerializer(announcement)
         user_serializer = serializers.UserAnnouncementSerializer(user)        
 
-        detail_serializer = serializers.PrivateAnnouncementSerializer(data={
+        response = {
             'announcement_detail': announcement_serializer.data,
             'user': user_serializer.data,
-        })
-        detail_serializer.is_valid(raise_exception=True)
-        response = detail_serializer.validated_data
+        }
         return Response(response, 200)
     

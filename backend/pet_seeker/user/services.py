@@ -1,6 +1,9 @@
 from . import models
 from .serializers import UserSerializer
 
+from image_loader.models import ProfileImage
+
+
 def create_user_with_userinfo(validated_data):
     user = models.CustomUser.objects.create_user(
             phone_number=validated_data.get('phone_number'), 
@@ -17,6 +20,9 @@ def get_user_info(user : models.CustomUser):
         "name": user_info.name,
         "contacts": user_info.contacts,
         'rating': user_info.rating,
-        'profile_image': user_info.profile_image.image.url if user_info.profile_image else None,
     }
+    try:
+        data['profile_image'] = user_info.profile_image.image.url
+    except ProfileImage.DoesNotExist:
+        data['profile_image'] = None
     return data

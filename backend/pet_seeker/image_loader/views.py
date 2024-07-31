@@ -5,12 +5,12 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from user.models import UserInfo
 from shelter.models import Shelter
 from . import models
-from user.permissions import IsOwnerOrReadOnly, IsShelterOwnerOrReadOnly
-from .serializers import ProfileImageSerializer, ShelterImageSerializer
+from user.permissions import IsOwnerOrReadOnly, IsShelterOwnerByQueryParamsOrReadOnly
+from . import serializers
 
 
 class ProfileImageLoadView(mixins.CreateModelMixin, generics.GenericAPIView):
-    serializer_class = ProfileImageSerializer
+    serializer_class = serializers.ProfileImageSerializer
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [permissions.IsAuthenticated]
 
@@ -30,7 +30,7 @@ class ProfileImageLoadView(mixins.CreateModelMixin, generics.GenericAPIView):
 
 
 class ShelterImageLoadView(mixins.CreateModelMixin, generics.GenericAPIView):
-    serializer_class = ShelterImageSerializer
+    serializer_class = serializers.ShelterImageSerializer
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
@@ -49,3 +49,95 @@ class ShelterImageLoadView(mixins.CreateModelMixin, generics.GenericAPIView):
         }, 200)
 
 
+class PrivateAnnouncementImageLoadView(mixins.CreateModelMixin, generics.GenericAPIView):
+    serializer_class = serializers.PrivateAnnouncementImageSerializer
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+
+    def post(self, request, pk, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            announcement = models.PrivateAnnouncement.objects.get(pk=pk)
+        except models.PrivateAnnouncement.DoesNotExist:
+            return Response({"error": "Объявление не существует"}, 400)
+        images = serializer.validated_data.get('images')
+        announcement_images = [models.PrivateAnnouncementImage(announcement=announcement, image=image) for image in images]
+        models.PrivateAnnouncementImage.objects.bulk_create(announcement_images)
+        return Response({
+            'success': 'Изображения успешно загружены',
+        }, 200)
+    
+
+class ShelterAnnouncementImageLoadView(mixins.CreateModelMixin, generics.GenericAPIView):
+    serializer_class = serializers.ShelterAnnouncementImageSerializer
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [permissions.IsAuthenticated, IsShelterOwnerByQueryParamsOrReadOnly]
+
+    def post(self, request, pk, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            announcement = models.ShelterAnnouncement.objects.get(pk=pk)
+        except models.ShelterAnnouncement.DoesNotExist:
+            return Response({"error": "Объявление не существует"}, 400)
+        images = serializer.validated_data.get('images')
+        announcement_images = [models.ShelterAnnouncementImage(announcement=announcement, image=image) for image in images]
+        models.ShelterAnnouncementImage.objects.bulk_create(announcement_images)
+        return Response({
+            'success': 'Изображения успешно загружены',
+        }, 200)
+    
+
+class ProfileImageDeleteView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, *args, **kwargs):
+        user_info = self.request.user.user_info
+        if user_info.profile_image:
+            user_info.profile_image.delete()
+        return Response({
+            'success': 'Изображение успешно удалено',
+        }, 200)
+
+
+class ShelterImageDeleteView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+
+    def delete(self, request, pk, *args, **kwargs):
+        try:
+            image = models.ShelterImage.objects.get(pk=pk)
+        except models.ShelterImage.DoesNotExist:
+            return Response({"error": "Изображение не существует"}, 400)
+        image.delete()
+        return Response({
+            'success': 'Изображение успешно удалено',
+        }, 200)
+    
+
+class PrivateAnnouncementImageDeleteView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+
+    def delete(self, request, pk, *args, **kwargs):
+        try:
+            image = models.PrivateAnnouncementImage.objects.get(pk=pk)
+        except models.PrivateAnnouncementImage.DoesNotExist:
+            return Response({"error": "Изображение не существует"}, 400)
+        image.delete()
+        return Response({
+            'success': 'Изображение успешно удалено',
+        }, 200)
+    
+    
+class ShelterAnnouncementImageDeleteView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated, IsShelterOwnerByQueryParamsOrReadOnly]
+
+    def delete(self, request, pk, *args, **kwargs):
+        try:
+            image = models.ShelterAnnouncementImage.objects.get(pk=pk)
+        except models.ShelterAnnouncementImage.DoesNotExist:
+            return Response({"error": "Изображение не существует"}, 400)
+        image.delete()
+        return Response({
+            'success': 'Изображение успешно удалено',
+        }, 200)

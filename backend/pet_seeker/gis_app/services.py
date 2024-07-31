@@ -28,6 +28,9 @@ class YandexGeocoderCoordinatesToAddressServicer:
             'format': 'json',
         })
         response.raise_for_status()
+        status_code = response.json().get('statusCode')
+        if status_code == 403:
+            return 'Что-то с api ключом'
         result = (
             response.json()['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['formatted']
         )
@@ -46,3 +49,4 @@ class YandexGeocoderCoordinatesToAddressServicer:
             response.json()['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos']
         )
         return result
+    

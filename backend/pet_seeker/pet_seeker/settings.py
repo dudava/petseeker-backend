@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-90t-xxoi$7tq$j=p++mb$r4pn^j2jy6f1bgonio7ti^x!a%ze_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '5948-77-221-200-10.ngrok-free.app']   
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'gnat-choice-morally.ngrok-free.app']   
 
 YANDEXGEOCODER_API_KEY = os.getenv('YANDEXGEOCODER_API_KEY')
 
@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_spectacular',
-
+    'django_cleanup.apps.CleanupConfig',
+    
     'user', # приложение для работы с пользоавтелями (регистрация, изменение информации)
     'announcement', # приложение для работы с объявлениями
     'search_announcement', # приложение для поиска объявлений по параметрам и пагинация

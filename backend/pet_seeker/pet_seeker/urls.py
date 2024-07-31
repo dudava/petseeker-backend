@@ -11,7 +11,7 @@ urlpatterns = [
     
     path('api/user/', include('user.urls'), name='user'),
     path('api/sms-verification/', include('sms_verification.urls'), name='sms-verification'),
-    path('api/announcement/', include('announcement.urls'), name='announcement'),
+    path('api/private-announcement/', include('announcement.urls'), name='announcement'),
     path('api/search-announcement/', include('search_announcement.urls'), name='search-announcement'),
     path('api/shelter/', include('shelter.urls'), name='shelter'),
     path('api/shelter-announcement/', include('shelter_announcement.urls'), name='shelter-announcement'),

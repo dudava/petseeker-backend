@@ -1,5 +1,7 @@
 from rest_framework import permissions
 from shelter.models import Shelter
+from shelter_announcement.models import ShelterAnnouncement
+
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
@@ -15,10 +17,18 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         # Write permissions are only allowed to the owner of the snippet.
         return obj.user == request.user
     
-class IsShelterOwnerOrReadOnly(permissions.BasePermission):
+class IsShelterOwnerByQueryParamsOrReadOnly(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
-        shelter = Shelter.objects.get(pk=request.data.get('shelter'))
-        return shelter.user == request.user
+        request_url = request.build_absolute_uri()
+        print(request_url)
+        print(request_url.split('/'))
+        shelter_announcement_pk = int(request_url.split('/')[-2])
+        
+        try:
+            announcement = ShelterAnnouncement.objects.get(pk=shelter_announcement_pk)
+        except ShelterAnnouncement.DoesNotExist:
+            return False
+        return announcement.shelter.user == request.user

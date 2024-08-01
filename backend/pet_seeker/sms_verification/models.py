@@ -3,7 +3,7 @@ from user.models import CustomUser
 
 
 class SMSVerificationCode(models.Model):
-    phone_number = models.CharField(max_length=10)
+    phone_number = models.CharField(max_length=20)
     code = models.CharField(max_length=4)
     created_at = models.DateTimeField(auto_now_add=True)
 

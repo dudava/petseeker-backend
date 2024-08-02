@@ -5,7 +5,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from user.models import UserInfo
 from shelter.models import Shelter
 from . import models
-from user.permissions import IsOwnerOrReadOnly, IsShelterOwnerByQueryParamsOrReadOnly
+from user.permissions import IsOwnerOrReadOnly, IsShelterOwnerByQueryParamsOrReadOnly, \
+    IsShelterOwnerByAnnouncementQueryParamsOrReadOnly, IsPrivateAnnouncementOwnerByQueryParamsOrReadOnly
 from . import serializers
 
 
@@ -32,7 +33,7 @@ class ProfileImageLoadView(mixins.CreateModelMixin, generics.GenericAPIView):
 class ShelterImageLoadView(mixins.CreateModelMixin, generics.GenericAPIView):
     serializer_class = serializers.ShelterImageSerializer
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsShelterOwnerByQueryParamsOrReadOnly]
 
     def post(self, request, pk, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -52,7 +53,7 @@ class ShelterImageLoadView(mixins.CreateModelMixin, generics.GenericAPIView):
 class PrivateAnnouncementImageLoadView(mixins.CreateModelMixin, generics.GenericAPIView):
     serializer_class = serializers.PrivateAnnouncementImageSerializer
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsPrivateAnnouncementOwnerByQueryParamsOrReadOnly]
 
     def post(self, request, pk, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -72,7 +73,7 @@ class PrivateAnnouncementImageLoadView(mixins.CreateModelMixin, generics.Generic
 class ShelterAnnouncementImageLoadView(mixins.CreateModelMixin, generics.GenericAPIView):
     serializer_class = serializers.ShelterAnnouncementImageSerializer
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [permissions.IsAuthenticated, IsShelterOwnerByQueryParamsOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsShelterOwnerByAnnouncementQueryParamsOrReadOnly]
 
     def post(self, request, pk, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -102,7 +103,7 @@ class ProfileImageDeleteView(views.APIView):
 
 
 class ShelterImageDeleteView(views.APIView):
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsShelterOwnerByQueryParamsOrReadOnly]
 
     def delete(self, request, pk, *args, **kwargs):
         try:
@@ -116,7 +117,7 @@ class ShelterImageDeleteView(views.APIView):
     
 
 class PrivateAnnouncementImageDeleteView(views.APIView):
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsPrivateAnnouncementOwnerByQueryParamsOrReadOnly]
 
     def delete(self, request, pk, *args, **kwargs):
         try:
@@ -130,7 +131,7 @@ class PrivateAnnouncementImageDeleteView(views.APIView):
     
     
 class ShelterAnnouncementImageDeleteView(views.APIView):
-    permission_classes = [permissions.IsAuthenticated, IsShelterOwnerByQueryParamsOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsShelterOwnerByAnnouncementQueryParamsOrReadOnly]
 
     def delete(self, request, pk, *args, **kwargs):
         try:

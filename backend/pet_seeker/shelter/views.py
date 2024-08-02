@@ -2,7 +2,7 @@ from rest_framework import views, generics, viewsets, mixins, exceptions, permis
 from rest_framework.response import Response
 from .models import Shelter
 from . import serializers
-from user.permissions import IsOwnerOrReadOnly
+from user.permissions import IsOwnerOrReadOnly, IsShelterOwnerByQueryParamsOrReadOnly
 from user.models import CustomUser
 
 class ShelterCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
@@ -12,8 +12,6 @@ class ShelterCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin,
 
     def perform_create(self, serializer):
         user = self.request.user
-        print(user)
-        print(type(user))
         if not user.user_info.is_shelter_owner:
             raise exceptions.NotAcceptable("Вы не являетесь владельцем приюта(ов)")
         serializer.save(user=user)
@@ -39,7 +37,7 @@ class UserSheltersView(mixins.RetrieveModelMixin, generics.GenericAPIView):
 
 
 class ShelterDeleteView(mixins.DestroyModelMixin, generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsShelterOwnerByQueryParamsOrReadOnly]
 
     def delete(self, request, pk, format=None):
         try:

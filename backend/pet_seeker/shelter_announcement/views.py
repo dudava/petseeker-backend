@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets, mixins, generics, views, permissions
 from .models import ShelterAnnouncement
 from shelter.models import Shelter
-from user.permissions import IsOwnerOrReadOnly, IsShelterOwnerByAnnouncementQueryParamsOrReadOnly, IsAnnouncementShelterOwnerOrReadOnly
+from user_info.permissions import IsOwnerOrReadOnly, IsShelterOwnerByAnnouncementQueryParamsOrReadOnly, IsAnnouncementShelterOwnerOrReadOnly
 from search_announcement.views import PageNumberPagination
 
 

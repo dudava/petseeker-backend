@@ -3,8 +3,8 @@ from rest_framework import viewsets, mixins, generics, views, exceptions, permis
 from rest_framework.response import Response
 from .models import UserFeedback
 from . import serializers
-from user.permissions import IsOwnerOrReadOnly
-from user.models import CustomUser
+from user_info.permissions import IsOwnerOrReadOnly
+from user_info.models import CustomUser
 
 
 class UserFeedbackCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):

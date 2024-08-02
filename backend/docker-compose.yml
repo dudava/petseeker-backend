@@ -2,13 +2,14 @@ version: '3'
 
 services:
   rest-framework:
-    build: ./pet_seeker
+    build: .
+    entrypoint: /code/entrypoint.sh
+    restart: always
     container_name: rest-framework
-    
     volumes:
-      - ./pet_seeker:/usr/src/app
+      - .:/code
     ports:
-      - 8000:8000
+      - "8000:8000"
     environment:
       - DJANGO_SUPERUSER_USERNAME=admin
       - DJANGO_SUPERUSER_PASSWORD=123321
@@ -17,10 +18,17 @@ services:
       - pgdb
   pgdb:
     image: postgres:12
+    restart: always
     container_name: pgdb
-    ports:
-      - 5432:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+  nginx:
+    image: nginx:1.24.0
+    restart: always
+    volumes:
+      - ./config/nginx:/etc/nginx/templates
+      - .:/code
+    ports:
+      - "80:80"

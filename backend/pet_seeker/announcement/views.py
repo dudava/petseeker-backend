@@ -3,7 +3,7 @@ from rest_framework import generics, mixins, viewsets, permissions
 from rest_framework.response import Response
 
 from . import models, serializers
-from user.permissions import IsOwnerOrReadOnly, IsPrivateAnnouncementOwnerByQueryParamsOrReadOnly
+from user_info.permissions import IsOwnerOrReadOnly, IsPrivateAnnouncementOwnerByQueryParamsOrReadOnly
 
 class PrivateAnnouncementCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = models.PrivateAnnouncement.objects.all()

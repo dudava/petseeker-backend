@@ -1,6 +1,6 @@
 from django.db import models
 
-from user.models import UserInfo
+from user_info.models import UserInfo
 from shelter.models import Shelter
 from announcement.models import PrivateAnnouncement
 from shelter_announcement.models import ShelterAnnouncement

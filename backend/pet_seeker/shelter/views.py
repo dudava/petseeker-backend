@@ -2,8 +2,8 @@ from rest_framework import views, generics, viewsets, mixins, exceptions, permis
 from rest_framework.response import Response
 from .models import Shelter
 from . import serializers
-from user.permissions import IsOwnerOrReadOnly, IsShelterOwnerByQueryParamsOrReadOnly
-from user.models import CustomUser
+from user_info.permissions import IsOwnerOrReadOnly, IsShelterOwnerByQueryParamsOrReadOnly
+from user_info.models import CustomUser
 
 class ShelterCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Shelter.objects.all()

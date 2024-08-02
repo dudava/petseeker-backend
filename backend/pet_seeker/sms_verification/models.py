@@ -1,5 +1,5 @@
 from django.db import models
-from user.models import CustomUser
+from user_info.models import CustomUser
 
 
 class SMSVerificationCode(models.Model):

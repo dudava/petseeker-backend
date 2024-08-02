@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from .serializers import SmsVerificationCodeSerializer, SmsAuthSerializer
 from . import services
-from user.services import create_user_with_userinfo
-from user.models import CustomUser
+from user_info.services import create_user_with_userinfo
+from user_info.models import CustomUser
 
 class SmsVerificationCodeCreateView(generics.CreateAPIView):
     serializer_class = SmsVerificationCodeSerializer

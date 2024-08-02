@@ -2,10 +2,12 @@ from rest_framework import generics, views, viewsets, permissions, mixins
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from user.models import UserInfo
+from django.core import exceptions
+
+from user_info.models import UserInfo
 from shelter.models import Shelter
 from . import models
-from user.permissions import IsOwnerOrReadOnly, IsShelterOwnerByQueryParamsOrReadOnly, \
+from user_info.permissions import IsOwnerOrReadOnly, IsShelterOwnerByQueryParamsOrReadOnly, \
     IsShelterOwnerByAnnouncementQueryParamsOrReadOnly, IsPrivateAnnouncementOwnerByQueryParamsOrReadOnly
 from . import serializers
 
@@ -17,14 +19,16 @@ class ProfileImageLoadView(mixins.CreateModelMixin, generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         user_info = self.request.user.user_info
-        if user_info.profile_image:
-            serializer = self.get_serializer(instance=user_info.profile_image, data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-        else:
+        try:
+            user_info.profile_image
+        except models.ProfileImage.RelatedObjectDoesNotExist:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save(user_info=user_info)
+        else:
+            serializer = self.get_serializer(instance=user_info.profile_image, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
         return Response({
             'success': 'Изображение успешно загружено',
         }, 200)

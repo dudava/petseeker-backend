@@ -1,0 +1,25 @@
+upstream uwsgi_app {
+    server rest-framework:8000;
+}
+
+server {
+    listen              80;
+    server_name         127.0.0.1;
+
+    error_log           stderr warn;
+    access_log          /dev/stdout main;
+
+    location /static/ {
+        alias /code/pet_seeker/static/;
+    }
+
+    location /media/ {
+        alias /code/pet_seeker/media/;
+    }
+
+    location / {
+        include    /etc/nginx/uwsgi_params;
+        uwsgi_pass uwsgi_app;
+    }
+}
+    

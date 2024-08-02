@@ -35,6 +35,7 @@ YANDEXGEOCODER_API_KEY = os.getenv('YANDEXGEOCODER_API_KEY')
 # Application definition
 
 INSTALLED_APPS = [
+    'user_info', # приложение для работы с пользоавтелями (регистрация, изменение информации)
     'django.contrib.admin',
     'django.contrib.auth',
     'rest_framework.authtoken',
@@ -46,7 +47,6 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'django_cleanup.apps.CleanupConfig',
     
-    'user', # приложение для работы с пользоавтелями (регистрация, изменение информации)
     'announcement', # приложение для работы с объявлениями
     'search_announcement', # приложение для поиска объявлений по параметрам и пагинация
     'shelter', # приложение для добавления приютов к пользователю и их редактирование
@@ -173,4 +173,4 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
 }
 
-# AUTH_USER_MODEL = 'user.CustomUser'
+AUTH_USER_MODEL = 'user_info.CustomUser'

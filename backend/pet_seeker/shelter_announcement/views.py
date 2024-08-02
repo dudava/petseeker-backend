@@ -1,18 +1,20 @@
 from . import serializers
 from rest_framework.response import Response
-from rest_framework import viewsets, mixins, generics, views
+from rest_framework import viewsets, mixins, generics, views, permissions
 from .models import ShelterAnnouncement
 from shelter.models import Shelter
-from user.permissions import IsOwnerOrReadOnly, IsShelterOwnerByQueryParamsOrReadOnly
+from user.permissions import IsOwnerOrReadOnly, IsShelterOwnerByAnnouncementQueryParamsOrReadOnly, IsAnnouncementShelterOwnerOrReadOnly
 from search_announcement.views import PageNumberPagination
+
 
 class ShelterAnnouncementCreateEditViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ShelterAnnouncementDetailSerializer
     queryset = ShelterAnnouncement.objects.all()
-    permission_classes = [IsOwnerOrReadOnly, IsShelterOwnerByQueryParamsOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsAnnouncementShelterOwnerOrReadOnly]
+
 
 class ShelterAnnouncementDeleteView(mixins.DestroyModelMixin, generics.GenericAPIView):
-    permission_classes = [IsOwnerOrReadOnly, IsShelterOwnerByQueryParamsOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly, IsShelterOwnerByAnnouncementQueryParamsOrReadOnly]
     
     def delete(self, request, pk, format=None):
         try:

@@ -29,7 +29,7 @@ class UserFeedbackCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelM
 
 
 class UserFeedbackDeleteView(views.APIView):
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, ]
     def delete(self, request, pk, format=None):
         try:
             feedback = UserFeedback.objects.get(pk=pk)

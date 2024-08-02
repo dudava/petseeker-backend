@@ -3,7 +3,7 @@ from rest_framework import generics, mixins, viewsets, permissions
 from rest_framework.response import Response
 
 from . import models, serializers
-from user.permissions import IsOwnerOrReadOnly
+from user.permissions import IsOwnerOrReadOnly, IsPrivateAnnouncementOwnerByQueryParamsOrReadOnly
 
 class PrivateAnnouncementCreateEditViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = models.PrivateAnnouncement.objects.all()
@@ -15,7 +15,7 @@ class PrivateAnnouncementCreateEditViewSet(mixins.CreateModelMixin, mixins.Updat
 
 
 class PrivateAnnouncementDeleteView(mixins.DestroyModelMixin, generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsPrivateAnnouncementOwnerByQueryParamsOrReadOnly]
     # TODO: защита от удаления не своих объявлений
     def delete(self, request, pk, format=None):
         try:

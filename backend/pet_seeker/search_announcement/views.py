@@ -1,9 +1,11 @@
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, generics
 import django_filters
+from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from announcement.models import PrivateAnnouncement
+from shelter_announcement.models import ShelterAnnouncement
 from announcement.serializers import PrivateAnnouncementListSerializer
-from rest_framework.pagination import PageNumberPagination
 
 
 class AnnouncementPaginator(PageNumberPagination):
@@ -29,3 +31,9 @@ class AnnouncementSearchViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class = AnnouncementFilter
     pagination_class = AnnouncementPaginator
+
+    def get_queryset(self, *args, **kwargs):
+        filter_params = self.request.query_params
+        private_announcements = PrivateAnnouncement.objects.filter(**filter_params)
+        shelter_announcements = ShelterAnnouncement.objects.filter(**filter_params)
+        return private_announcements

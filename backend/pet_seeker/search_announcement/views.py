@@ -7,22 +7,6 @@ from . import services
 from . import serializers
 
 
-class AnnouncementPaginator(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 100
-
-
-class AnnouncementFilter(django_filters.FilterSet):
-    pet_type = django_filters.CharFilter(lookup_expr='exact')
-    breed = django_filters.CharFilter(lookup_expr='exact')
-    color = django_filters.CharFilter(lookup_expr='exact')
-
-    class Meta:
-        fields = ('pet_type', 'breed', 'color', )
-
-
-
 class AnnouncementSearchViewSet(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = serializers.AnnouncementFilterSerializer 
     # работать будет (1)_(1), желательно page_size четный передавать

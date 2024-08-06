@@ -46,7 +46,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class UserInfo(models.Model):
     user = models.OneToOneField(CustomUser, related_name='user_info', null=True, blank=True, on_delete=models.CASCADE)
-    is_shelter_owner = models.BooleanField(default=False) # в зависимости от значения, некоторые поля должны быть null
     contacts = models.CharField(max_length=100, null=True, blank=True)
-    name = models.CharField(max_length=100, null=True, blank=True) # для частника ФИО
+    name = models.CharField(max_length=100, null=True, blank=True) 
+    surname = models.CharField(max_length=100, null=True, blank=True)
     rating = models.FloatField(null=True, blank=True)

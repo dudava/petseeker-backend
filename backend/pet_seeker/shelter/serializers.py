@@ -12,4 +12,3 @@ class ShelterSerializer(serializers.ModelSerializer):
 
     def get_images(self, obj):
         return [{'id': image.id, 'url': image.image.url} for image in obj.images.all()]
-        

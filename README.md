@@ -7,9 +7,8 @@ PostgreSQL - СУБД <br>
 Redis - сервис кэширования <br>
 Firebase Cloud Messaging - отправка, таргетинг уведомлений <br>
 
-## Deploy для разработки
+## Deploy
 ```
 cd ./backend
-docker build -t pet_seeker_backend .
-docker run -d -p 8000:8000 pet-seeker-backend
+docker-compose up --build
 ```

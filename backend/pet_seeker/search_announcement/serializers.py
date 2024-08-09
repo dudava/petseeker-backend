@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 
-class AnnouncementFilterSerializer(serializers.Serializer):
+class CommonAnnouncementListSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     pet_type = serializers.CharField()
     breed = serializers.CharField()

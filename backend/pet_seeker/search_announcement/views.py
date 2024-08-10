@@ -8,7 +8,7 @@ from . import serializers
 
 
 class AnnouncementSearchViewSet(mixins.ListModelMixin, generics.GenericAPIView):
-    serializer_class = serializers.AnnouncementFilterSerializer 
+    serializer_class = serializers.CommonAnnouncementListSerializer 
     # работать будет (1)_(1), желательно page_size четный передавать
     def get(self, request, *args, **kwargs):
         filter_params = {_: request.query_params[_] for _ in request.query_params}
@@ -18,7 +18,7 @@ class AnnouncementSearchViewSet(mixins.ListModelMixin, generics.GenericAPIView):
             announcements = services.get_announcements(filter_params, page, page_size)
         except FieldError:
             return Response({"error": "Неверные параметры"}, 400)
-        serializer = serializers.AnnouncementFilterSerializer(announcements, many=True)        
+        serializer = serializers.CommonAnnouncementListSerializer(announcements, many=True)        
 
         count = len(announcements)
         prev_url = request.build_absolute_uri().replace(f'page={str(page)}', f'page={page - 1}')

@@ -15,7 +15,6 @@ def get_user_info(user : models.CustomUser):
     user_info = user.user_info
     data = {
         "id": user.id,
-        "is_shelter_owner": user_info.is_shelter_owner,
         "phone_number": user.phone_number,
         "name": user_info.name,
         "contacts": user_info.contacts,

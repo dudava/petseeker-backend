@@ -45,5 +45,3 @@ class AnnouncementMixin(LocationModelMixin):
     class Meta:
         abstract = True
         ordering = ['-published_at']
-
-    

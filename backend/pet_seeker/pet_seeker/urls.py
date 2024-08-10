@@ -17,6 +17,7 @@ urlpatterns = [
     path('api/shelter-announcement/', include('shelter_announcement.urls'), name='shelter-announcement'),
     path('api/user-feedback/', include('rating.urls'), name='rating'),
     path('api/image-loader/', include('image_loader.urls'), name='image-loader'),
+    path('api/favourites/', include('announcement_favourites.urls'), name='favourites'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),

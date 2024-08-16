@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-90t-xxoi$7tq$j=p++mb$r4pn^j2jy6f1bgonio7ti^x!a%ze_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'gnat-choice-morally.ngrok-free.app']   
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '147.45.158.159']   
 
 YANDEXGEOCODER_API_KEY = os.getenv('YANDEXGEOCODER_API_KEY')
 

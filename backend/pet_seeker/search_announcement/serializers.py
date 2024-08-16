@@ -13,5 +13,6 @@ class CommonAnnouncementListSerializer(serializers.Serializer):
     published_at = serializers.CharField()
     address = serializers.CharField()
 
+
     def get_images(self, obj):
         return [{'id': image.id, 'url': image.image.url} for image in obj.images.all()]

@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -19,6 +18,13 @@ class AnnouncementMixin(LocationModelMixin):
     class PetTypeChoices(models.TextChoices):
         dog = "Собака"
         cat = "Кошка"
+
+    class AgeCategoryChoices(models.TextChoices):
+        SMALL = "Маленький"
+        YOUNG = "Молодой"
+        ADULT = "Взрослый"
+        OLD = "Старый"
+        UNKNOWN = "Неизвестно"
 
     name = models.CharField(max_length=100)
     description = models.TextField()

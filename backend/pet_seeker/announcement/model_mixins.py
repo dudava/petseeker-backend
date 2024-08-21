@@ -9,6 +9,7 @@ class AnnouncementMixin(LocationModelMixin):
         find = 'Нашел'
         lost = 'Потерял'
         looking_home = 'Ищет дом'
+        give = 'Отдаю'
 
     class StateChoices(models.TextChoices):
         active = "Активный"

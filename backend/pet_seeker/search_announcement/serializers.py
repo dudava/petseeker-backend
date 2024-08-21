@@ -15,4 +15,5 @@ class CommonAnnouncementListSerializer(serializers.Serializer):
     address = serializers.CharField()
 
     def get_images(self, obj):
-        return [{'id': image.id, 'url': image.image.url} for image in obj.images.all()]
+        return [image.image.url for image in obj.images.all()]
+

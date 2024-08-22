@@ -5,7 +5,6 @@ class CommonAnnouncementListSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     pet_type = serializers.CharField(source='get_pet_type_display')
     breed = serializers.CharField()
-    color = serializers.CharField()
     user = serializers.CharField(required=False, source='user.user_info.name')
     shelter = serializers.CharField(required=False, source='shelter.name')
     status = serializers.CharField(source='get_status_display')

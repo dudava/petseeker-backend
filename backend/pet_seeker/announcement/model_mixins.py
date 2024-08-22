@@ -6,19 +6,19 @@ from gis_app.model_mixins import LocationModelMixin
 
 class AnnouncementMixin(LocationModelMixin):
     class StatusChoices(models.TextChoices):
-        find = 'Нашел'
-        lost = 'Потерял'
-        looking_home = 'Ищет дом'
-        give = 'Отдаю'
+        find = 'Нашел', 'find'
+        lost = 'Потерял', 'lost'
+        looking_home = 'Ищет дом', 'looking_home'
+        give = 'Отдаю', 'give'
 
     class StateChoices(models.TextChoices):
-        active = "Активный"
-        in_process = "В процессе усыновления"
-        inactive = "Неактивный"
+        active = "Активный", "active"
+        in_process = "В процессе усыновления", "in_process"
+        inactive = "Неактивный", "inactive"
 
     class PetTypeChoices(models.TextChoices):
-        dog = "Собака"
-        cat = "Кошка"
+        dog = "Собака", "dog"
+        cat = "Кошка", "cat"
 
     class AgeCategoryChoices(models.TextChoices):
         SMALL = "Маленький"

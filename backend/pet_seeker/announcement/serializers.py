@@ -21,9 +21,9 @@ class PrivateAnnouncementDetailSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.id')
     lattitude_longitude = serializers.ReadOnlyField()
     images = serializers.SerializerMethodField()
-    status = serializers.CharField(source='get_status_display')
-    state = serializers.CharField(source='get_state_display')
-    pet_type = serializers.CharField(source='get_pet_type_display')
+    status = serializers.ChoiceField(choices=models.AnnouncementMixin.StatusChoices.choices)
+    state = serializers.ChoiceField(choices=models.AnnouncementMixin.StateChoices.choices)
+    pet_type = serializers.ChoiceField(choices=models.AnnouncementMixin.PetTypeChoices.choices)
     
     class Meta:
         model = models.PrivateAnnouncement

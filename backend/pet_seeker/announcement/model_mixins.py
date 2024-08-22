@@ -40,7 +40,6 @@ class AnnouncementMixin(LocationModelMixin):
     age = models.PositiveIntegerField(blank=False, null=False, validators=[MinValueValidator(0), MaxValueValidator(50)])
     gender = models.BooleanField() # True - male, False - female
     wool_type = models.CharField(max_length=50, blank=True, null=True)
-    color = models.CharField(max_length=50, null=False, blank=False)
     sterilization = models.BooleanField(null=True)
     allergenicity = models.BooleanField(null=True)
     health_issues = models.CharField(max_length=200, blank=True, null=True)

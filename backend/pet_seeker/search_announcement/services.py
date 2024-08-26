@@ -54,7 +54,7 @@ def full_text_search(filter_params):
         search_vector = SearchVector(
             'name', 'description', 'address',
             'pet_type', 'state', 'status',
-            'breed', 'color', 'health_issues',
+            'breed', 'health_issues',
             'temperament')
 
         return {

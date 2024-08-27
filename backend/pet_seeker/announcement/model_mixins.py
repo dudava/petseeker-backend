@@ -1,5 +1,4 @@
 from django.db import models
-from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from gis_app.model_mixins import LocationModelMixin
 
@@ -27,6 +26,11 @@ class AnnouncementMixin(LocationModelMixin):
         OLD = "Старый"
         UNKNOWN = "Неизвестно"
 
+    class DimensionChoices(models.TextChoices):
+        thin = "Худое"
+        average = "Среднее"
+        thick = "Полное"
+
     name = models.CharField(max_length=100)
     description = models.TextField()
     published_at = models.DateTimeField(auto_now_add=True)
@@ -45,7 +49,7 @@ class AnnouncementMixin(LocationModelMixin):
     health_issues = models.CharField(max_length=200, blank=True, null=True)
     vaccinations = models.BooleanField(null=True)
     weigth = models.FloatField(null=False, blank=False, validators=[MinValueValidator(0), MaxValueValidator(150)])
-    dimmensions = models.PositiveIntegerField(null=False, blank=False, validators=[MinValueValidator(0), MaxValueValidator(200)])
+    dimensions = models.CharField(max_length=50, choices=DimensionChoices.choices, null=False, blank=False)
     temperament = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta:

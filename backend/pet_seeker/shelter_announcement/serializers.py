@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import ShelterAnnouncement
-from announcement.serializers import PrivateAnnouncementDetailSerializer
 
 
 class ShelterAnnouncementDetailSerializer(serializers.ModelSerializer):
@@ -12,7 +11,7 @@ class ShelterAnnouncementDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_images(self, obj):
-        return [{'id': image.id, 'url': image.image.url} for image in obj.images.all()]
+        return [image.image.url for image in obj.images.all()]
     
 
 class ShelterAnnouncementSerializer(serializers.ModelSerializer):

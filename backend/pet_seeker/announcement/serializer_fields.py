@@ -19,4 +19,13 @@ class PetTypeEnumField(serializers.SerializerMethodField):
         return obj.get_pet_type_display().lower().replace(' ', '_')
 
 
+class AgeEnumField(serializers.SerializerMethodField):
+    def to_representation(self, value):
+        obj = self.parent.instance
+        return obj.get_age_display().lower().replace(' ', '_')
 
+
+class WoolTypeEnumField(serializers.SerializerMethodField):
+    def to_representation(self, value):
+        obj = self.parent.instance
+        return obj.get_wool_type_display().lower().replace(' ', '_')

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import ShelterAnnouncement
-
 from announcement.serializers import PrivateAnnouncementDetailSerializer
+
 
 class ShelterAnnouncementDetailSerializer(serializers.ModelSerializer):
     lattitude_longitude = serializers.ReadOnlyField()

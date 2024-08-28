@@ -14,7 +14,7 @@ class PrivateAnnouncementListSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'images', 'address', 'published_at', 'user', 'status', 'state')
 
     def get_images(self, obj):
-        return [{'id': image.id, 'url': image.image.url} for image in obj.images.all()]
+        return [image.image.url for image in obj.images.all()]
 
 
 class PrivateAnnouncementDetailSerializer(serializers.ModelSerializer):
@@ -30,7 +30,7 @@ class PrivateAnnouncementDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def get_images(self, obj):
-        return [{'id': image.id, 'url': image.image.url} for image in obj.images.all()]
+        return [image.image.url for image in obj.images.all()]
 
     
 class UserAnnouncementSerializer(serializers.Serializer):

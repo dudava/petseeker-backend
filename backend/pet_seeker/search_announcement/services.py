@@ -69,7 +69,7 @@ def get_announcements(filter_params, page, page_size=10):
     page_start = (page - 1) * page_size / 2
     page_end = page * page_size / 2
 
-    filter_params = convert_age_filter_to_range(filter_params)
+    # filter_params = convert_age_filter_to_range(filter_params)
     search_params = full_text_search(filter_params)
     search_vector = search_params.get('search_vector')
     search_query = search_params.get('search_query')

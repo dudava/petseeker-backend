@@ -28,7 +28,7 @@ class PrivateAnnouncementFavouriteView(views.APIView):
             announcement = PrivateAnnouncement.objects.get(pk=pk)
         except PrivateAnnouncement.DoesNotExist:
             return Response({'error': 'Объявление не существует'}, status=404)
-        favourite_exists = PrivateAnnouncementFavourite.objects.filter(announcement=announcement, user=request.user).exists()
+        favourite_exists = PrivateAnnouncementFavourite.objects.filter(private_announcement=announcement, user=request.user).exists()
         if favourite_exists:
             return Response({'error': 'Объявление уже находится в избранном'}, status=409)
         else:

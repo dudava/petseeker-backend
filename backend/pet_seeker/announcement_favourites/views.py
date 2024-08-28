@@ -28,11 +28,15 @@ class PrivateAnnouncementFavouriteView(views.APIView):
             announcement = PrivateAnnouncement.objects.get(pk=pk)
         except PrivateAnnouncement.DoesNotExist:
             return Response({'error': 'Объявление не существует'}, status=404)
-        PrivateAnnouncementFavourite.objects.create(
-            user=request.user,
-            private_announcement=announcement
-        )
-        return Response(status=200)
+        favourite_exists = PrivateAnnouncementFavourite.objects.filter(announcement=announcement, user=request.user).exists()
+        if favourite_exists:
+            return Response({'error': 'Объявление уже находится в избранном'}, status=409)
+        else:
+            PrivateAnnouncementFavourite.objects.create(
+                user=request.user,
+                private_announcement=announcement
+            )
+            return Response(status=201)
 
 
 class ShelterAnnouncementFavouriteView(views.APIView):
@@ -55,11 +59,15 @@ class ShelterAnnouncementFavouriteView(views.APIView):
             announcement = ShelterAnnouncement.objects.get(pk=pk)
         except ShelterAnnouncement.DoesNotExist:
             return Response({'error': 'Объявление не существует'}, status=404)
-        ShelterAnnouncementFavourite.objects.create(
-            user=request.user,
-            shelter_announcement=announcement
-        )
-        return Response(status=200)
+        favourite_exists = PrivateAnnouncementFavourite.objects.filter(announcement=announcement, user=request.user).exists()
+        if favourite_exists:
+            return Response({'error': 'Объявление уже находится в избранном'}, status=409)
+        else:
+            ShelterAnnouncementFavourite.objects.create(
+                user=request.user,
+                shelter_announcement=announcement
+            )
+            return Response(status=201)
     
 
 class GetFavouritesView(views.APIView):

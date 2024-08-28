@@ -1,6 +1,8 @@
 from rest_framework import serializers, status, mixins, viewsets, permissions, generics, views
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from sms_verification.services import create_verification_code
+from sms_verification.models import SMSVerificationCode
 from .permissions import IsOwnerOrReadOnly
 from . import models
 from . import services
@@ -33,11 +35,24 @@ class UserInfoEditView(mixins.UpdateModelMixin, generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def put(self, request):
-        user_info = models.UserInfo.objects.get(user=request.user)
-        serializer = UserInfoSerializer(data=request.data)
+        try:
+            user_info = models.UserInfo.objects.get(user=request.user)
+        except models.UserInfo.DoesNotExist:
+            return Response({'error': 'Пользователь не найден'}, status=404)
+
+        old_phone_number = request.user.phone_number
+
+        serializer = UserInfoSerializer(user_info, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        serializer.update(instance=user_info, validated_data=serializer.validated_data)
-        return Response(serializer.validated_data, 200)
+
+        serializer.save()
+
+        new_phone_number = request.data.get('phone_number')
+        if new_phone_number and new_phone_number != old_phone_number:
+            SMSVerificationCode.objects.filter(phone_number=old_phone_number).delete()
+            create_verification_code(new_phone_number)
+
+        return Response(serializer.data, 200)
 
 
 class UserDeleteView(views.APIView):

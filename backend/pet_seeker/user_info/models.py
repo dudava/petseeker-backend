@@ -46,7 +46,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class UserInfo(models.Model):
     user = models.OneToOneField(CustomUser, related_name='user_info', null=True, blank=True, on_delete=models.CASCADE)
-    contacts = models.CharField(max_length=100, null=True, blank=True)
+    telegram = models.CharField(max_length=100, null=True, blank=True)
     name = models.CharField(max_length=100, null=True, blank=True) 
     surname = models.CharField(max_length=100, null=True, blank=True)
+    patronymic = models.CharField(max_length=100, null=True, blank=True)
     rating = models.FloatField(null=True, blank=True)

@@ -11,13 +11,14 @@ def create_user_with_userinfo(validated_data):
     user_info = models.UserInfo.objects.create(user=user)
     return user, user_info
 
+
 def get_user_info(user : models.CustomUser):
     user_info = user.user_info
     data = {
         "id": user.id,
         "phone_number": user.phone_number,
         "name": user_info.name,
-        "contacts": user_info.contacts,
+        "telegram": user_info.telegram,
         'rating': user_info.rating,
     }
     try:

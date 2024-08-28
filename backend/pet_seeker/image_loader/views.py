@@ -19,9 +19,7 @@ class ProfileImageLoadView(mixins.CreateModelMixin, generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         user_info = self.request.user.user_info
-        try:
-            user_info.profile_image
-        except models.ProfileImage.RelatedObjectDoesNotExist:
+        if not hasattr(user_info, 'profile_image'):
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save(user_info=user_info)

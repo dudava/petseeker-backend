@@ -18,11 +18,12 @@ class UserInfoSerializer(serializers.ModelSerializer):
     surname = serializers.CharField(max_length=100, required=False, allow_null=True)
     patronymic = serializers.CharField(max_length=100, required=False, allow_null=True)
     telegram = serializers.CharField(max_length=100, required=False, allow_null=True)
+    gender = serializers.BooleanField(required=False, allow_null=True)
     rating = serializers.ReadOnlyField()
 
     class Meta:
         model = models.UserInfo
-        fields = ('user_id', 'phone_number', 'name', 'surname', 'patronymic', 'telegram', 'rating')
+        fields = ('user_id', 'phone_number', 'name', 'surname', 'patronymic', 'gender', 'telegram', 'rating')
 
     def update(self, instance, validated_data):
         # Обновляем телефонный номер пользователя

@@ -12,12 +12,15 @@ def create_user_with_userinfo(validated_data):
     return user, user_info
 
 
-def get_user_info(user : models.CustomUser):
+def get_user_info(user: models.CustomUser):
     user_info = user.user_info
     data = {
         "id": user.id,
         "phone_number": user.phone_number,
         "name": user_info.name,
+        "surname": user_info.surname,
+        "patronymic": user_info.patronymic,
+        "gender": user_info.gender,
         "telegram": user_info.telegram,
         'rating': user_info.rating,
     }

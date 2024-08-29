@@ -13,6 +13,12 @@ class PrivateAnnouncementCreateEditViewSet(mixins.CreateModelMixin, mixins.Updat
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response({'id': serializer.instance.id}, 201)
+
 
 class PrivateAnnouncementDeleteView(mixins.DestroyModelMixin, generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated, IsPrivateAnnouncementOwnerByQueryParamsOrReadOnly]

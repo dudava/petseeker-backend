@@ -50,4 +50,5 @@ class UserInfo(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True) 
     surname = models.CharField(max_length=100, null=True, blank=True)
     patronymic = models.CharField(max_length=100, null=True, blank=True)
+    gender = models.BooleanField(null=True, blank=True)
     rating = models.FloatField(null=True, blank=True)

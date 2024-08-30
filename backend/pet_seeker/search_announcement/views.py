@@ -54,3 +54,15 @@ class PrivateAnnouncementSearchViewSet(BaseAnnouncementSearchViewSet):
 class ShelterAnnouncementSearchViewSet(BaseAnnouncementSearchViewSet):
     def get_announcements(self, filter_params, page, page_size):
         return services.get_shelter_announcements(filter_params, page, page_size)
+
+
+class MyPrivateAnnouncementSearchViewSet(BaseAnnouncementSearchViewSet):
+    def get_announcements(self, filter_params, page, page_size):
+        filter_params['user_id'] = self.request.user.id
+        return services.get_private_announcements(filter_params, page, page_size)
+
+
+class MyShelterAnnouncementSearchViewSet(BaseAnnouncementSearchViewSet):
+    def get_announcements(self, filter_params, page, page_size):
+        filter_params['user_id'] = self.request.user.id
+        return services.get_private_announcements(filter_params, page, page_size)

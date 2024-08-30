@@ -1,49 +1,35 @@
 from announcement.models import PrivateAnnouncement
 from shelter_announcement.models import ShelterAnnouncement
-from announcement.model_mixins import AnnouncementMixin
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
 
-def convert_age_filter_to_range(filter_params):
-    age_filter = filter_params.get('age')
+def paginate(queryset, page_start, page_end):
+    return queryset[page_start:page_end]
 
-    if not age_filter:
-        return filter_params
 
-    start_age = None
-    end_age = None
+def prepare_params(filter_params, page, page_size):
+    page_start = (page - 1) * page_size // 2
+    page_end = page * page_size // 2
 
-    if AnnouncementMixin.AgeCategoryChoices.SMALL in age_filter:
-        start_age = 0
-        end_age = 1
+    search_params = full_text_search(filter_params)
+    search_vector = search_params.get('search_vector')
+    search_query = search_params.get('search_query')
 
-    if AnnouncementMixin.AgeCategoryChoices.YOUNG in age_filter:
-        if start_age is None or 2 < start_age:
-            start_age = 2
-        if end_age is None or 7 > end_age:
-            end_age = 7
+    return page_start, page_end, search_vector, search_query
 
-    if AnnouncementMixin.AgeCategoryChoices.ADULT in age_filter:
-        if start_age is None or 8 < start_age:
-            start_age = 8
-        if end_age is None or 12 > end_age:
-            end_age = 12
 
-    if AnnouncementMixin.AgeCategoryChoices.OLD in age_filter:
-        if start_age is None or 13 < start_age:
-            start_age = 13
-        if end_age is None or 50 > end_age:
-            end_age = 50
+def get_announcements_by_type(model, filter_params, search_vector, search_query, page_start, page_end):
+    if search_query and search_vector:
+        announcements = model.objects.annotate(
+            search_rank=SearchRank(search_vector, search_query)
+        ).filter(
+            search_rank__gt=0,
+            **filter_params
+        ).order_by('-search_rank')[page_start:page_end]
+    else:
+        announcements = model.objects.filter(**filter_params)[page_start:page_end]
 
-    if AnnouncementMixin.AgeCategoryChoices.UNKNOWN in age_filter:
-        start_age = 0
-        end_age = 50
-
-    del filter_params['age']
-
-    filter_params['age__range'] = (start_age, end_age)
-
-    return filter_params
+    return announcements
 
 
 def full_text_search(filter_params):
@@ -66,60 +52,52 @@ def full_text_search(filter_params):
 
 
 def get_announcements(filter_params, page, page_size=10):
-    page_start = (page - 1) * page_size / 2
-    page_end = page * page_size / 2
+    page_start, page_end, search_vector, search_query = prepare_params(filter_params, page, page_size)
 
-    # filter_params = convert_age_filter_to_range(filter_params)
-    search_params = full_text_search(filter_params)
-    search_vector = search_params.get('search_vector')
-    search_query = search_params.get('search_query')
+    private_announcements = get_announcements_by_type(
+        PrivateAnnouncement, filter_params, search_vector, search_query, page_start, page_end
+    )
 
-    if search_query and search_vector:
-        private_announcements = PrivateAnnouncement.objects.annotate(
-            search_rank=SearchRank(search_vector, search_query)
-        ).filter(
-            search_rank__gt=0,
-            **filter_params
-        ).order_by('-search_rank')[page_start:page_end]
-
-        shelter_announcements = ShelterAnnouncement.objects.annotate(
-            search_rank=SearchRank(search_vector, search_query)
-        ).filter(
-            search_rank__gt=0,
-            **filter_params
-        ).order_by('-search_rank')[page_start:page_end]
-    else:
-        private_announcements = PrivateAnnouncement.objects.filter(**filter_params)[page_start:page_end]
-        shelter_announcements = ShelterAnnouncement.objects.filter(**filter_params)[page_start:page_end]
+    shelter_announcements = get_announcements_by_type(
+        ShelterAnnouncement, filter_params, search_vector, search_query, page_start, page_end
+    )
 
     announcements = [*private_announcements, *shelter_announcements]
 
-    if private_announcements.count() < page_size / 2:
-        additional_count = page_size / 2 - private_announcements.count()
-
-        if search_query and search_vector:
-            additional_shelter_announcements = ShelterAnnouncement.objects.annotate(
-                search_rank=SearchRank(search_vector, search_query)
-            ).filter(
-                search_rank__gt=0,
-                **filter_params
-            ).order_by('-search_rank')[page_start:page_end + additional_count]
-        else:
-            additional_shelter_announcements = ShelterAnnouncement.objects.filter(**filter_params)[page_end:page_end + additional_count]
-
+    if len(private_announcements) < page_size // 2:
+        additional_count = page_size // 2 - len(private_announcements)
+        additional_shelter_announcements = get_announcements_by_type(
+            ShelterAnnouncement, filter_params, search_vector, search_query, page_end, page_end + additional_count
+        )
         announcements += [*additional_shelter_announcements]
-    elif shelter_announcements.count() < page_size / 2:
-        additional_count = page_size / 2 - shelter_announcements.count()
 
-        if search_query and search_vector:
-            additional_private_announcements = PrivateAnnouncement.objects.annotate(
-                search_rank=SearchRank(search_vector, search_query)
-            ).filter(
-                search_rank__gt=0,
-                **filter_params
-            ).order_by('-search_rank')[page_end:page_end + additional_count]
-        else:
-            additional_private_announcements = PrivateAnnouncement.objects.filter(**filter_params)[page_end:page_end + additional_count]
-
+    elif len(shelter_announcements) < page_size // 2:
+        additional_count = page_size // 2 - len(shelter_announcements)
+        additional_private_announcements = get_announcements_by_type(
+            PrivateAnnouncement, filter_params, search_vector, search_query, page_end, page_end + additional_count
+        )
         announcements += [*additional_private_announcements]
+
     return announcements
+
+
+def get_private_announcements(filter_params, page, page_size=10):
+    page_size *= 2
+    page_start, page_end, search_vector, search_query = prepare_params(filter_params, page, page_size)
+
+    private_announcements = get_announcements_by_type(
+        PrivateAnnouncement, filter_params, search_vector, search_query, page_start, page_end
+    )
+
+    return private_announcements
+
+
+def get_shelter_announcements(filter_params, page, page_size=20):
+    page_size *= 2
+    page_start, page_end, search_vector, search_query = prepare_params(filter_params, page, page_size)
+
+    shelter_announcements = get_announcements_by_type(
+        ShelterAnnouncement, filter_params, search_vector, search_query, page_start, page_end
+    )
+
+    return shelter_announcements

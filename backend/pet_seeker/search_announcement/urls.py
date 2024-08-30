@@ -3,4 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.AnnouncementSearchViewSet.as_view(), name='announcement_search'),
+    path('private-announcement/', views.PrivateAnnouncementSearchViewSet.as_view(), name='announcement_search'),
+    path('shelter-announcement/', views.ShelterAnnouncementSearchViewSet.as_view(), name='announcement_search'),
 ]

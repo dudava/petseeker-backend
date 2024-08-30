@@ -7,18 +7,23 @@ from . import services
 from . import serializers
 
 
-class AnnouncementSearchViewSet(mixins.ListModelMixin, generics.GenericAPIView):
-    serializer_class = serializers.CommonAnnouncementListSerializer 
-    # работать будет (1)_(1), желательно page_size четный передавать
+class BaseAnnouncementSearchViewSet(mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = serializers.CommonAnnouncementListSerializer
+
+    def get_announcements(self, filter_params, page, page_size):
+        raise NotImplementedError("Этот метод должен быть реализован в дочернем классе")
+
     def get(self, request, *args, **kwargs):
-        filter_params = {_: request.query_params[_] for _ in request.query_params}
+        filter_params = {key: request.query_params[key] for key in request.query_params}
         page = int(filter_params.pop('page', 1))
         page_size = int(filter_params.pop('page_size', 10))
+
         try:
-            announcements = services.get_announcements(filter_params, page, page_size)
+            announcements = self.get_announcements(filter_params, page, page_size)
         except FieldError:
             return Response({"error": "Неверные параметры"}, 400)
-        serializer = serializers.CommonAnnouncementListSerializer(announcements, many=True)        
+
+        serializer = self.serializer_class(announcements, many=True)
 
         count = len(announcements)
         prev_url = request.build_absolute_uri().replace(f'page={str(page)}', f'page={page - 1}')
@@ -27,11 +32,25 @@ class AnnouncementSearchViewSet(mixins.ListModelMixin, generics.GenericAPIView):
         next_url = request.build_absolute_uri().replace(f'page={str(page)}', f'page={page + 1}')
         if count < page_size:
             next_url = None
-        
+
         return Response({
             'count': count,
             'next': next_url,
             'previous': prev_url,
             'results': serializer.data
         }, 200)
-    
+
+
+class AnnouncementSearchViewSet(BaseAnnouncementSearchViewSet):
+    def get_announcements(self, filter_params, page, page_size):
+        return services.get_announcements(filter_params, page, page_size)
+
+
+class PrivateAnnouncementSearchViewSet(BaseAnnouncementSearchViewSet):
+    def get_announcements(self, filter_params, page, page_size):
+        return services.get_private_announcements(filter_params, page, page_size)
+
+
+class ShelterAnnouncementSearchViewSet(BaseAnnouncementSearchViewSet):
+    def get_announcements(self, filter_params, page, page_size):
+        return services.get_shelter_announcements(filter_params, page, page_size)

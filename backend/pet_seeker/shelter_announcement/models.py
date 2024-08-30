@@ -15,7 +15,7 @@ class ShelterAnnouncement(AnnouncementMixin):
     contacts = models.CharField(max_length=100, blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        self.contacts = self.shelter.contacts
+        self.contacts = self.shelter.telephone_number
         self.address = self.shelter.address
         self.status = AnnouncementMixin.StatusChoices.looking_home
         super().save(*args, **kwargs)

@@ -6,6 +6,7 @@ from . import services
 from user_info.services import create_user_with_userinfo
 from user_info.models import CustomUser
 
+
 class SmsVerificationCodeCreateView(generics.CreateAPIView):
     serializer_class = SmsVerificationCodeSerializer
 
@@ -15,7 +16,7 @@ class SmsVerificationCodeCreateView(generics.CreateAPIView):
         phone_number = serializer.validated_data.get('phone_number')
         services.create_verification_code(phone_number)
         return Response({"success": "СМС код отправлен"}, 200)
-    
+
 
 class SmsAuthView(generics.CreateAPIView):
     serializer_class = SmsAuthSerializer
@@ -36,4 +37,11 @@ class SmsAuthView(generics.CreateAPIView):
         token, created = Token.objects.get_or_create(user=user)
         response = Response({'message': 'Cookie set successfully'}, 200)
         response.set_cookie('token', token.key, httponly=True)
+        return response
+
+
+class SmsLogoutView(generics.CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        response = Response({'message': 'Cookie deleted successfully'}, 200)
+        response.delete_cookie('token')
         return response

@@ -23,6 +23,7 @@ def get_user_info(user: models.CustomUser):
         "gender": user_info.gender,
         "telegram": user_info.telegram,
         'rating': user_info.rating,
+        'date_joined': user.date_joined,
     }
     try:
         data['profile_image'] = user_info.profile_image.image.url

@@ -27,8 +27,13 @@ services:
   nginx:
     image: nginx:1.24.0
     restart: always
+    ports:
+      - "4430:4430"
+      - "800:800"
     volumes:
       - ./config/nginx:/etc/nginx/templates
+      - ./ssl/task.crt:/etc/ssl/certs/task.crt
+      - ./ssl/task.key:/etc/ssl/private/task.key
       - .:/code
-    ports:
-      - "80:80"
+    depends_on:
+      - rest-framework

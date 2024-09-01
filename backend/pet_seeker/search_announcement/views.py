@@ -3,6 +3,7 @@ from django.core.exceptions import FieldError
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from announcement.serializers import PrivateAnnouncementListSerializer
+from shelter.models import Shelter
 from . import services
 from . import serializers
 
@@ -64,5 +65,6 @@ class MyPrivateAnnouncementSearchViewSet(BaseAnnouncementSearchViewSet):
 
 class MyShelterAnnouncementSearchViewSet(BaseAnnouncementSearchViewSet):
     def get_announcements(self, filter_params, page, page_size):
-        filter_params['user_id'] = self.request.user.id
-        return services.get_private_announcements(filter_params, page, page_size)
+        shelter_ids = Shelter.objects.filter(user_id=self.request.user.id).values_list('id', flat=True)
+        filter_params['shelter_id__in'] = shelter_ids
+        return services.get_shelter_announcements(filter_params, page, page_size)

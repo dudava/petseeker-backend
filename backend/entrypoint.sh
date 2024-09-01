@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 cd /code/pet_seeker
 
